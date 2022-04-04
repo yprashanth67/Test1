@@ -8,6 +8,24 @@ jobs:
         type: registry-image
         source:
           repository: busybox
+      outputs:
+      - name: the-artifact
       run:
-        path: echo
-        args: ["Hello world!"]
+        path: sh
+        args:
+        - -cx
+        - |
+          ls -l .
+          echo "hello from another step!" > the-artifact/message
+  - task: read-first-task
+    config:
+      inputs: 
+      - name: the-artifact
+      platform: linux
+      image_resource:
+        type: registry-image
+        source:
+          repository: busybox
+      run:
+        path: cat
+        args: ['the-artifact/message']
