@@ -11,7 +11,8 @@ jobs:
     trigger: true  
   - task: hello-world-task
     config:
-      inputs: repo
+      inputs:
+      - name: repo
       platform: linux
       image_resource:
         type: registry-image
