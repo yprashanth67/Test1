@@ -11,6 +11,7 @@ jobs:
     trigger: true  
   - task: hello-world-task
     config:
+      inputs: repo
       platform: linux
       image_resource:
         type: registry-image
@@ -20,12 +21,9 @@ jobs:
       - name: the-artifact
       run:
         path: sh
-        args:
-        - -cx
-        - |
-          ls -l .
-          echo "hello from another step!" > the-artifact/message
-  - task: read-first-task
+        args: |
+        cat repo/README.md > the-artifact/message
+        echo 'appended by hello-world-job' >> the-artifact/message
     config:
       inputs: 
       - name: the-artifact
