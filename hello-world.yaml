@@ -22,9 +22,11 @@ jobs:
       - name: the-artifact
       run:
         path: sh
-        args: |
-        cat repo/README.md > the-artifact/message
-        echo 'appended by hello-world-job' >> the-artifact/message
+        args:
+        - -cx 
+        - |
+          cat repo/README.md > the-artifact/message
+          echo 'appended by hello-world-job' >> the-artifact/message
     config:
       inputs: 
       - name: the-artifact
