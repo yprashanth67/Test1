@@ -1,0 +1,43 @@
+resources:
+- name: repo1
+  type: git
+  source:
+   uri: https://github.com/yprashanth67/lostcause.git
+   branch: master
+   usernname: yprashanth67@yahoo.com
+   password: pP#8019805055
+jobs:
+- name: edit-git
+  plan:
+  - get: repo1
+    trigger: true
+  - task: edit-git
+    config:
+      inputs: 
+      - name: repo1
+      platform: linux
+      image_resource:
+        type: registry-image
+        source:
+          repository: busybox
+      params:
+        EMAIL: yprashanth67@yahoo.com
+        GIT_AUTHOR_NAME: Person Doe
+      run:
+        path: sh
+        args: 
+        - -cx
+        - |
+          cd repo1
+          date +%Y-%m-%d > todays-date
+          date | awk '{print $4}' >> README.md
+          git add .
+          git config --global user.email $EMAIL
+          git config --global user.name $GIT_AUTHOR_NAME
+          git commit -m "Update todays date"
+      outputs:
+      - name: repo1
+  - put: repo1
+    params:
+      repository: {repository: https://github.com/yprashanth67/Test.git}
+
