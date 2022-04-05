@@ -19,7 +19,7 @@ jobs:
       image_resource:
         type: registry-image
         source:
-          repository: busybox
+          repository: gitea/gitea
       params:
         EMAIL: yprashanth67@yahoo.com
         GIT_AUTHOR_NAME: Person Doe
