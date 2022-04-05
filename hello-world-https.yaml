@@ -1,0 +1,47 @@
+resources:
+- name: repo
+  type: git
+  source:
+    uri: https://github.com/yprashanth67/lostcause.git
+    branch: master
+    username: yprashanth67@yahoo.com
+    password: pP#8019805055
+
+jobs:
+- name: hello-world-job
+  plan:
+  - get: repo
+    trigger: true  
+  - task: hello-world-task
+    config:
+      inputs:
+      - name: repo
+      platform: linux
+      image_resource:
+        type: registry-image
+        source:
+          repository: busybox
+      outputs:
+      - name: the-artifact
+      run:
+        path: sh
+        args:
+        - -cx 
+        - |
+          cat repo/README.md > the-artifact/message
+          echo 'appended by hello-world-job' >> the-artifact/message
+  - task: read-from-hello-world
+    config:
+      inputs: 
+      - name: the-artifact
+      platform: linux
+      image_resource:
+        type: registry-image
+        source:
+          repository: busybox
+      run:
+        path: cat
+        args: ['the-artifact/message']
+
+
+### this comment should trigger the pipeline 
